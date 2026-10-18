@@ -52,6 +52,10 @@ Possible `emailStatus` values: `valid`, `risky`, `not_found`, `unknown`.
 - The default sample uses the reserved `.invalid` domain so a Console QA run
   finishes without contacting a real mail server.
 - Catch-all domains are reported as `risky`, not `valid`.
+- On the Apify platform, outbound port 25 is blocked. Apify **residential**
+  proxy was tested and does **not** successfully `CONNECT host:25` either
+  (while `CONNECT host:443` works). Mailbox checks on the platform need an
+  external proxy/relay via `smtpProxyUrl` that allows CONNECT to port 25.
 
 ## Support
 

@@ -23,6 +23,7 @@ export const EMAIL_STATUS = Object.freeze({
  *   lookupMx?: (domain: string) => Promise<import('../vendor/email-verify/mx.js').MxLookup>,
  *   disposableDomains?: Set<string>,
  *   probeMailbox?: unknown,
+ *   getProxyUrl?: () => string | Promise<string | null | undefined>,
  * }} [options]
  */
 export function createEmailFinder(options = {}) {
@@ -50,6 +51,7 @@ export function createEmailFinder(options = {}) {
                 checkCatchAll: options.checkCatchAll !== false,
                 checkRoleAccounts: options.checkRoleAccounts !== false,
                 probeMailbox: options.probeMailbox,
+                getProxyUrl: options.getProxyUrl,
                 log: runOptions.log,
             });
         },
@@ -69,6 +71,7 @@ export function createEmailFinder(options = {}) {
  *   checkCatchAll?: boolean,
  *   checkRoleAccounts?: boolean,
  *   probeMailbox?: unknown,
+ *   getProxyUrl?: () => string | Promise<string | null | undefined>,
  *   log?: { info: Function, warning: Function },
  * }} options
  */
@@ -90,6 +93,7 @@ export async function findEmailForPerson(person, options) {
                 checkCatchAll: options.checkCatchAll !== false,
                 smtpTimeoutMs: options.smtpTimeoutMs ?? 10_000,
                 probeMailbox: options.probeMailbox,
+                getProxyUrl: options.getProxyUrl,
             }))
         );
 

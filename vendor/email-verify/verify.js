@@ -24,6 +24,8 @@ const DEFAULT_PARALLEL_DOMAINS = 50;
  *   checkCatchAll?: boolean,
  *   smtpTimeoutMs?: number,
  *   probeMailbox?: typeof probeMailbox,
+ *   proxyUrl?: string | null,
+ *   getProxyUrl?: () => string | Promise<string | null | undefined>,
  * }} options
  */
 export async function verifyEmail(email, options) {
@@ -84,6 +86,8 @@ export async function verifyEmail(email, options) {
             domain: parsed.domain,
             timeoutMs: options.smtpTimeoutMs ?? 10_000,
             checkCatchAll: options.checkCatchAll !== false,
+            proxyUrl: options.proxyUrl,
+            getProxyUrl: options.getProxyUrl,
         });
     } catch {
         return finish(STATUS.unknown, REASON.checkFailed, true);

@@ -15,7 +15,16 @@ export function normalizeInput(raw = {}) {
         people: input.people.map((item, index) => normalizePerson(item, index)),
         smtpTimeoutMs: requireInteger(input.smtpTimeoutMs, 10_000, 1_000, 120_000, 'smtpTimeoutMs'),
         maxConcurrentPerDomain: requireInteger(input.maxConcurrentPerDomain, 2, 1, 3, 'maxConcurrentPerDomain'),
+        smtpProxyUrl: normalizeOptionalString(input.smtpProxyUrl),
     };
+}
+
+/**
+ * @param {unknown} value
+ */
+function normalizeOptionalString(value) {
+    if (value === undefined || value === null || value === '') return '';
+    return String(value).trim();
 }
 
 /**
