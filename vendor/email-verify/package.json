@@ -1,0 +1,7 @@
+{
+    "name": "email-verify-engine",
+    "version": "0.1.0",
+    "type": "module",
+    "private": true,
+    "description": "Verification engine vendored from bulk-email-verifier for reuse inside email-finder."
+}

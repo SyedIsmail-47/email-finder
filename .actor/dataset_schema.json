@@ -1,0 +1,85 @@
+{
+    "actorSpecification": 1,
+    "title": "Found emails",
+    "description": "One record per person checked in this run.",
+    "fields": {
+        "type": "object",
+        "properties": {
+            "firstName": {
+                "type": "string",
+                "title": "First name",
+                "description": "First name from the input."
+            },
+            "lastName": {
+                "type": "string",
+                "title": "Last name",
+                "description": "Last name from the input."
+            },
+            "domain": {
+                "type": "string",
+                "title": "Domain",
+                "description": "Company domain that was checked."
+            },
+            "foundEmail": {
+                "type": ["string", "null"],
+                "title": "Found email",
+                "description": "Best verified address for this person. Empty when none worked."
+            },
+            "emailStatus": {
+                "type": "string",
+                "title": "Email status",
+                "description": "valid, risky, not_found, or unknown."
+            },
+            "patternUsed": {
+                "type": "string",
+                "title": "Pattern used",
+                "description": "Which name pattern produced the found email, such as first.last or flast. Empty when none."
+            }
+        }
+    },
+    "views": {
+        "overview": {
+            "title": "Found emails",
+            "description": "One row per person.",
+            "transformation": {
+                "fields": [
+                    "firstName",
+                    "lastName",
+                    "domain",
+                    "foundEmail",
+                    "emailStatus",
+                    "patternUsed"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "firstName": {
+                        "label": "First name",
+                        "format": "text"
+                    },
+                    "lastName": {
+                        "label": "Last name",
+                        "format": "text"
+                    },
+                    "domain": {
+                        "label": "Domain",
+                        "format": "text"
+                    },
+                    "foundEmail": {
+                        "label": "Found email",
+                        "format": "text"
+                    },
+                    "emailStatus": {
+                        "label": "Email status",
+                        "format": "text"
+                    },
+                    "patternUsed": {
+                        "label": "Pattern used",
+                        "format": "text"
+                    }
+                }
+            }
+        }
+    }
+}

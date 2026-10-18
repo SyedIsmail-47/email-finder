@@ -1,0 +1,76 @@
+{
+    "title": "Email Finder",
+    "description": "Find a likely work email for each person from their name and company domain. Each guess is checked with a real mailbox probe that never sends mail.",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "people": {
+            "title": "People",
+            "type": "array",
+            "description": "People to find emails for. Each row needs a first name, last name, and company domain. The sample uses the reserved .invalid domain so a default run finishes without contacting a real mail server.",
+            "editor": "schemaBased",
+            "minItems": 1,
+            "default": [
+                {
+                    "firstName": "Ada",
+                    "lastName": "Lovelace",
+                    "domain": "mailbox-check.invalid"
+                }
+            ],
+            "prefill": [
+                {
+                    "firstName": "Ada",
+                    "lastName": "Lovelace",
+                    "domain": "mailbox-check.invalid"
+                }
+            ],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "firstName": {
+                        "title": "First name",
+                        "type": "string",
+                        "description": "Given name used to build email guesses.",
+                        "editor": "textfield",
+                        "minLength": 1
+                    },
+                    "lastName": {
+                        "title": "Last name",
+                        "type": "string",
+                        "description": "Family name used to build email guesses.",
+                        "editor": "textfield",
+                        "minLength": 1
+                    },
+                    "domain": {
+                        "title": "Domain",
+                        "type": "string",
+                        "description": "Company website, such as stripe.com. https:// and www are ignored.",
+                        "editor": "textfield",
+                        "minLength": 1
+                    }
+                },
+                "required": ["firstName", "lastName", "domain"]
+            }
+        },
+        "smtpTimeoutMs": {
+            "title": "SMTP timeout",
+            "type": "integer",
+            "description": "How long to wait for each SMTP connection, in milliseconds.",
+            "default": 10000,
+            "prefill": 10000,
+            "minimum": 1000,
+            "maximum": 120000,
+            "unit": "milliseconds"
+        },
+        "maxConcurrentPerDomain": {
+            "title": "Max checks per mail domain",
+            "type": "integer",
+            "description": "How many mailbox checks may run at the same time against one mail domain. Other domains still run in parallel. The maximum is 3.",
+            "default": 2,
+            "prefill": 2,
+            "minimum": 1,
+            "maximum": 3
+        }
+    },
+    "required": ["people"]
+}

@@ -1,0 +1,11 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "title": "Output schema of the Email Finder",
+    "properties": {
+        "results": {
+            "type": "string",
+            "title": "Found emails",
+            "template": "{{links.apiDefaultDatasetUrl}}/items"
+        }
+    }
+}

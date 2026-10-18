@@ -1,0 +1,14 @@
+{
+    "actorSpecification": 1,
+    "name": "email-finder",
+    "title": "Email Finder",
+    "description": "Guess professional email addresses from a person's name and company domain, then verify each guess with a real SMTP mailbox check that never sends mail. Stops at the first valid address.",
+    "version": "0.1",
+    "buildTag": "latest",
+    "input": "./input_schema.json",
+    "output": "./output_schema.json",
+    "dockerfile": "../Dockerfile",
+    "storages": {
+        "dataset": "./dataset_schema.json"
+    }
+}

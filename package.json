@@ -1,0 +1,16 @@
+{
+    "name": "email-finder",
+    "version": "0.1.0",
+    "type": "module",
+    "description": "Guess and verify professional email addresses from a name and domain.",
+    "engines": {
+        "node": ">=18"
+    },
+    "scripts": {
+        "start": "node src/main.js",
+        "test": "node --test"
+    },
+    "dependencies": {
+        "apify": "^3.4.2"
+    }
+}
