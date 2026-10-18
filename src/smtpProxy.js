@@ -77,32 +77,36 @@ export async function confirmSmtpProxyPath(domains, residential, options = {}) {
 
         const direct25 = await probeTcpReachable(host, 25, Math.min(3_000, timeoutMs), null);
         let residential25 = null;
-        let residential443 = null;
         if (residential) {
             residential25 = await probeTcpReachable(host, 25, timeoutMs, await residential.getProxyUrl());
-            residential443 = await probeTcpReachable(host, 443, timeoutMs, await residential.getProxyUrl());
         }
 
-        rows.push({ domain, host, direct25, residential25, residential443 });
+        rows.push({ domain, host, direct25, residential25 });
         logger.info(
             `Port path check ${domain} via ${host}: `
             + `direct:25=${formatProbe(direct25)} `
-            + `residential:25=${formatProbe(residential25)} `
-            + `residential:443=${formatProbe(residential443)}`,
+            + `residential:25=${formatProbe(residential25)}`,
         );
+    }
+
+    // Control: residential CONNECT to a normal HTTPS host (not an MX hostname).
+    let httpsControl = null;
+    if (residential) {
+        httpsControl = await probeTcpReachable('www.google.com', 443, timeoutMs, await residential.getProxyUrl());
+        logger.info(`Port path control residential www.google.com:443=${formatProbe(httpsControl)}`);
     }
 
     const directOk = rows.filter((row) => row.direct25?.ok).length;
     const res25Ok = rows.filter((row) => row.residential25?.ok).length;
-    const res443Ok = rows.filter((row) => row.residential443?.ok).length;
+    const httpsOk = Boolean(httpsControl?.ok);
     logger.info(
         `Port path summary: direct:25 ${directOk}/${rows.length}, `
         + `residential:25 ${res25Ok}/${rows.length}, `
-        + `residential:443 ${res443Ok}/${rows.length}`,
+        + `residential https control ${httpsOk ? 'OK' : 'FAIL'}`,
     );
-    if (rows.length && res443Ok > 0 && res25Ok === 0) {
+    if (rows.length && httpsOk && res25Ok === 0) {
         logger.warning(
-            'Apify residential proxy can CONNECT to :443 but not to SMTP :25. '
+            'Apify residential proxy can CONNECT to https :443 but not to SMTP :25. '
             + 'Mailbox checks need an external proxy/relay that allows CONNECT host:25.',
         );
     } else if (rows.length && directOk === 0 && res25Ok === 0) {
@@ -110,7 +114,7 @@ export async function confirmSmtpProxyPath(domains, residential, options = {}) {
             'Outbound SMTP port 25 is unreachable on this host (direct and residential).',
         );
     }
-    return { rows, directOk, res25Ok, res443Ok };
+    return { rows, directOk, res25Ok, httpsOk, httpsControl };
 }
 
 /**
